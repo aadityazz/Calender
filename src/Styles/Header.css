@@ -1,0 +1,48 @@
+/* Header.css */
+
+.navbar {
+    background-color: #007bff; /* Change to your desired navbar background color */
+    color: #fff; /* Change to your desired text color */
+    padding: 10px 0;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-logo {
+    font-size: 24px;
+    margin: 0;
+    text-decoration: none;
+    color: #fff; /* Change to your desired text color */
+}
+
+.nav-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 20px;
+}
+
+.nav-item:last-child {
+    margin-right: 0;
+}
+
+.logout-button {
+    background-color: transparent;
+    border: none;
+    color: #fff; /* Change to your desired button text color */
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-button:hover {
+    text-decoration: underline;
+}
