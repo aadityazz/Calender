@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../Styles/CalendarGrid.css'; // Import the CSS file for styling
 
 const CalendarGrid = ({ onDateClick, minDate }) => {
     const currentDate = new Date();
@@ -78,8 +79,8 @@ const CalendarGrid = ({ onDateClick, minDate }) => {
     }
 
     return (
-        <div className="calendar-grid">
-            <table>
+        <div className="calendar-grid-container">
+            <table className="calendar-grid">
                 <thead>
                 <tr>
                     <th>Sun</th>
@@ -98,4 +99,3 @@ const CalendarGrid = ({ onDateClick, minDate }) => {
 };
 
 export default CalendarGrid;
-

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../Styles/Slot.css'; // Import the CSS file for styling
 
 const Slot = ({ startTime, endTime, color, onSelect }) => {
     const handleSelect = () => {
@@ -8,11 +9,14 @@ const Slot = ({ startTime, endTime, color, onSelect }) => {
     };
 
     return (
-        <div className="slot" style={{ backgroundColor: color }}>
-            <span>Time: {startTime} - {endTime}</span>
-            <button onClick={handleSelect}>Select</button>
+        <div className="slot-container">
+            <div className="slot-content">
+                <span className="slot-time">Time: {startTime} - {endTime}</span>
+                <button className="select-button" onClick={handleSelect}>Book</button>
+            </div>
         </div>
     );
 };
 
 export default Slot;
+

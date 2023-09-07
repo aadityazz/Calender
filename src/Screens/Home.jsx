@@ -4,6 +4,7 @@ import React from 'react';
 import MonthCalendar from './MonthCalendar';
 import Slot from './Slot';
 import Profile from './Profile';
+import ParentComponent from "./ParentComponent";
 
 const styles = {
     home: {
@@ -20,6 +21,10 @@ const styles = {
         borderRadius: '5px',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     },
+    section2: {
+        margin: '20px',
+        padding: '20px',
+    },
     header: {
         fontSize: '24px',
         marginBottom: '10px',
@@ -30,9 +35,9 @@ const Home = () => {
     return (
         <div style={styles.home}>
             <div style={styles.section}>
-                <Profile />
+                <ParentComponent />
             </div>
-            <div style={styles.section}>
+            <div style={styles.section2}>
                 <MonthCalendar />
             </div>
         </div>

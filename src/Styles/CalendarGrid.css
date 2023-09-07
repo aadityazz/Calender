@@ -1,0 +1,48 @@
+/* CalendarGrid.css */
+
+.calendar-grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calendar-grid {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.calendar-grid th,
+.calendar-grid td {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.calendar-grid th {
+    background-color: #f0f0f0; /* Header background color */
+    color: #333; /* Header text color */
+}
+
+.calendar-grid td {
+    cursor: pointer;
+}
+
+.today {
+    background-color: #007bff; /* Today's date background color */
+    color: #fff; /* Today's date text color */
+}
+
+.selected {
+    background-color: #28a745; /* Selected date background color */
+    color: #fff; /* Selected date text color */
+}
+
+.past-date {
+    color: #ccc; /* Past date text color */
+}
+
+/* Add additional styling as needed */

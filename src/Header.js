@@ -10,9 +10,9 @@ const Header = ({ onLogout }) => {
                     <li className="nav-item">
                         <a href="/">Home</a>
                     </li>
-                    <li className="nav-item">
-                        <a href="/profile">Profile</a>
-                    </li>
+                    {/*<li className="nav-item">*/}
+                    {/*    <a href="/profile">Profile</a>*/}
+                    {/*</li>*/}
                     <li className="nav-item">
                         <button className="logout-button" onClick={onLogout}>
                             Logout
