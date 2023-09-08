@@ -1,25 +1,23 @@
 import React, { useContext } from 'react';
 import { UserContext } from "./UserContext";
-import { useNavigate } from 'react-router-dom';
-import './Styles/Header.css'; // Import your header CSS file
+import { Link, Navigate } from "react-router-dom";
+import './Header.css'; // Import your CSS file for styling
 
 const Header = () => {
     const { userInfo, setUserInfo } = useContext(UserContext);
-    const navigate = useNavigate();
+    const admin = userInfo && userInfo.user ? userInfo.user.isAdmin : null;
 
-    const onLogout = (event) => {
-        // Implement your logout logic here, such as clearing localStorage and resetting userInfo
-        // localStorage.removeItem('jwt');
-        // localStorage.removeItem('user');
-        event.preventDefault();
+    const onLogout = () => {
         setUserInfo(null);
-        navigate('/login'); // Redirect to the login page after logout
     };
 
     return (
         <header className="navbar">
             <nav className="nav-container">
-                <h1 className="nav-logo">Calendar</h1>
+                <div className="left-section">
+                    <h1 className="nav-logo">Calendar</h1>
+                    {userInfo && admin ? <span className="admin-label">Admin</span> : null}
+                </div>
                 <ul className="nav-menu">
                     {userInfo ? (
                         // If userInfo exists, render Logout button
@@ -31,9 +29,11 @@ const Header = () => {
                     ) : (
                         // If userInfo doesn't exist, render Login button
                         <li className="nav-item">
-                            <button className="login-button" onClick={() => navigate('/login')}>
-                                Login
-                            </button>
+                            <Link to="/login">
+                                <button className="login-button">
+                                    Login
+                                </button>
+                            </Link>
                         </li>
                     )}
                 </ul>

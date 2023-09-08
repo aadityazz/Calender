@@ -8,7 +8,7 @@ import '../Styles/Home.css';
 const Home = () => {
 
     const { userInfo, setUserInfo } = useContext(UserContext);
-    console.log(userInfo);
+   // console.log(userInfo);
 
     if (!userInfo || Object.keys(userInfo).length === 0) {
         return <Navigate to={'/login'} />;

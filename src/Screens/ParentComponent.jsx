@@ -4,10 +4,10 @@ import {UserContext} from "../UserContext";
 
 const ParentComponent = () => {
     const {userInfo} = useContext(UserContext);
-
+    const {user} = userInfo;
     const userData = {
-        username: userInfo.username,
-        email: userInfo.email,
+        username: user.username,
+        email: user.email,
         bookings: [
             { bookingDetails: 'Booking 1' },
             { bookingDetails: 'Booking 2' },
