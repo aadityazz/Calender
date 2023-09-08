@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('vote', 'root', 'root', {
+const sequelize = new Sequelize('calendar', 'root', 'root', {
     host: 'localhost',
     dialect: 'mysql',
 });

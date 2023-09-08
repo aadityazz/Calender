@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './Layout'; // Import your Layout component
@@ -9,7 +7,7 @@ import Login from "./Screens/Login";
 import Register from "./Screens/Register"; // Import other pages
 
 function App() {
-    const [user, setUser] = useState(null);
+    //const [user, setUser] = useState(null);
 
     // Define the logout function
     const handleLogout = () => {

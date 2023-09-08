@@ -3,19 +3,21 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../keys');
-const User = require('../Model/user'); // Adjust the model path as needed
+const Auth = require('../Model/user'); // Adjust the model path as needed
 
-// User signup route
+// Auth signup route
 router.post('/signup', (req, res) => {
-    const { firstname, lastname, stateName, email, password, mobile, city, branch, isAdmin, isVoted } = req.body;
+    const { username, email, password, isAdmin, } = req.body;
 
-    if (!email || !password || !firstname || !mobile || !city || !branch) {
+    console.log(req.body);
+
+    if (!email || !password || !username) {
         return res.status(422).json({ error: 'Please add all the fields' });
     }
 
     bcrypt.hash(password, 12)
         .then(hashedPassword => {
-            const user = new User({
+            const user = new Auth({
                 username,
                 email,
                 password: hashedPassword,
@@ -37,7 +39,8 @@ router.post('/signup', (req, res) => {
         });
 });
 
-// User signin route
+
+// Auth signin route
 router.post('/signin', (req, res) => {
     const { email, password } = req.body;
 
@@ -45,7 +48,7 @@ router.post('/signin', (req, res) => {
         return res.status(422).json({ error: 'Please add email or password' });
     }
 
-    User.findOne({ where: { email } })
+    Auth.findOne({where:{email}})
         .then(savedUser => {
             if (!savedUser) {
                 return res.status(422).json({ error: 'Invalid Email or password' });
@@ -55,21 +58,25 @@ router.post('/signin', (req, res) => {
                 .then(doMatch => {
                     if (doMatch) {
                         const token = jwt.sign({ _id: savedUser.id }, JWT_SECRET);
-                        const { id, firstname, lastname, stateName, email,  mobile, city, branch, isAdmin } = savedUser;
-                        res.json({ token, user: { id, firstname, lastname, stateName, email, mobile, city, branch, isAdmin } });
+                        const { id, username, email, isAdmin } = savedUser;
+                        console.log(62);
+                        res.status(200).json({ token, user: { id, username, email, isAdmin } }); // Send a 200 OK response with the token and user info
                     } else {
                         return res.status(422).json({ error: 'Invalid Email or password' });
                     }
                 })
                 .catch(err => {
                     console.log(err);
+                    console.log(70);
                     res.status(500).json({ error: 'Error comparing passwords' });
                 });
         })
         .catch(err => {
             console.log(err);
+            console.log(76);
             res.status(500).json({ error: 'Error fetching user data' });
         });
 });
+
 
 module.exports = router;

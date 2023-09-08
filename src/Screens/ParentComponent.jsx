@@ -1,30 +1,23 @@
-// ParentComponent.js
-
-import React, { useEffect, useState } from 'react';
+import React, {useContext} from 'react';
 import Profile from './Profile';
+import {UserContext} from "../UserContext";
 
 const ParentComponent = () => {
-    const [user, setUser] = useState(null);
+    const {userInfo} = useContext(UserContext);
 
-    // Fetch user data (e.g., from your authentication system or API)
-    useEffect(() => {
-        // Simulated user data for demonstration purposes
-        const userData = {
-            username: 'john_doe',
-            email: 'john@example.com',
-            bookings: [
-                { bookingDetails: 'Booking 1' },
-                { bookingDetails: 'Booking 2' },
-                // Add more booking objects as needed
-            ],
-        };
-
-        setUser(userData);
-    }, []);
+    const userData = {
+        username: userInfo.username,
+        email: userInfo.email,
+        bookings: [
+            { bookingDetails: 'Booking 1' },
+            { bookingDetails: 'Booking 2' },
+            // Add more booking objects as needed
+        ],
+    };
 
     return (
         <div>
-            {user ? <Profile user={user} /> : <p>Loading...</p>}
+            {userData ? <Profile user={userData} /> : <p>Loading...</p>}
         </div>
     );
 };

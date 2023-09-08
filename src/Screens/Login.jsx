@@ -1,17 +1,39 @@
 import { useContext, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import '../Styles/Login.css'; // Import the CSS file for styling
+import M from 'materialize-css';
 
 export default function Login() {
-    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [redirect, setRedirect] = useState(false);
     const { setUserInfo } = useContext(UserContext);
 
-    async function login(ev) {
-        // Implement your login logic here
+    const PostData = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/signin", {
+                method: "post",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (response.ok) {
+                const userInfo = await response.json();
+                setUserInfo(userInfo);
+                console.log(userInfo);
+                setRedirect(true);
+            } else {
+                const errorData = await response.json(); // Parse error response
+                M.toast({ html: errorData.error || 'Wrong credentials', classes: "#c62828 red darken-3" });
+            }
+        } catch (error) {
+            console.error(error);
+            M.toast({ html: 'An error occurred while processing your request', classes: "#c62828 red darken-3" });
+        }
     }
+
 
     if (redirect) {
         return <Navigate to={'/'} />;
@@ -19,13 +41,13 @@ export default function Login() {
 
     return (
         <div className="login-container">
-            <form className="login-form" onSubmit={login}>
+            <form className="login-form" onSubmit={PostData}>
                 <h1>Login</h1>
                 <input
                     type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(ev) => setUsername(ev.target.value)}
+                    placeholder="Email"
+                    value={email}
+                    onChange={(ev) => setEmail(ev.target.value)}
                 />
                 <input
                     type="password"
@@ -35,6 +57,9 @@ export default function Login() {
                 />
                 <button type="submit">Login</button>
             </form>
+            <p style={{ fontFamily: "Raleway", marginLeft: "115px", fontSize: "17px" }}>
+                <Link to="/register" style={{ color: "grey", fontWeight: "600" }}>Don't have an account? Register here</Link>
+            </p>
         </div>
     );
 }
