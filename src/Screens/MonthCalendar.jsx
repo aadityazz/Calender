@@ -37,7 +37,7 @@ const MonthCalendar = () => {
                             ) : (
                                 <div>
                                     <SlotCreationForm date={selectedDate}/>
-                                    <DayView date={selectedDate} />
+                                    <DayView date={selectedDate} admin = {admin}/>
                                 </div>
                             )
 

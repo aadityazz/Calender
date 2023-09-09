@@ -11,7 +11,7 @@ export default function Register() {
 
     const register = (event) => {
         event.preventDefault();
-        console.log("button hit")
+        //console.log("button hit")
         fetch("http://localhost:5000/api/auth/signup",{
             method:"post",
             headers:{

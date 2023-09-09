@@ -7,7 +7,7 @@ const Auth = require('../Model/user'); // Adjust the model path as needed
 
 // Auth signup route
 router.post('/signup', (req, res) => {
-    const { username, email, password, isAdmin, } = req.body;
+    const { username, email, password, isAdmin } = req.body;
 
     console.log(req.body);
 

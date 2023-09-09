@@ -11,9 +11,11 @@ app.use(bodyParser.json());
 
 // Import models
 const User = require('./Model/user');
+const Slot = require('./Model/slots')
 
 // Routes
 app.use('/api/auth', require('./Route/auth'));
+app.use('/api/slot', require('./Route/slots'))
 
 // Start server
 sequelize.authenticate()

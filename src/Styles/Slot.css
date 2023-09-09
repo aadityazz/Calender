@@ -39,4 +39,19 @@
     background-color: #0056b3;
 }
 
+.select-button-delete{
+    background-color: #c52e1f;
+    color: #fff;
+    border: none;
+    width: 70px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.select-button-delete:hover {
+    background-color: #911606;
+}
+
 /* Add additional styling as needed */

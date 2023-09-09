@@ -1,7 +1,7 @@
 import React from 'react';
 import Slot from './Slot';
 
-const DayView = ({ date }) => {
+const DayView = ({ date, admin }) => {
     // Generate slots for the selected date
     const generateSlots = () => {
         // Example slots for demonstration, you should replace this with your data or logic
@@ -17,6 +17,7 @@ const DayView = ({ date }) => {
                 startTime={slot.startTime}
                 endTime={slot.endTime}
                 color={slot.color}
+                admin ={admin}
                 onSelect={handleSlotSelect} // You can define the handleSlotSelect function
             />
         ));
