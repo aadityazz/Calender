@@ -18,9 +18,7 @@ const Profile = ({ user }) => {
                     <strong>Email:</strong> {user.email}
                 </div>
                 <div>
-                    {user.isAdmin ? (
-                        <h2>Admin</h2>
-                    ) : (
+                    {!user.isAdmin ? (
                         <>
                             <h3>Bookings</h3>
                             {user.bookings.length > 0 ? (
@@ -33,6 +31,8 @@ const Profile = ({ user }) => {
                                 <p>No bookings yet.</p>
                             )}
                         </>
+                    ) : (
+                        <></>
                     )}
                 </div>
 

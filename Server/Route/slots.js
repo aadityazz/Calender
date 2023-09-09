@@ -1,6 +1,42 @@
 const express = require('express');
 const router = express.Router();
 const Slot = require('../Model/slots'); // Adjust the model path as needed
+const nodemailer = require('nodemailer');
+
+
+// Define an API endpoint for sending emails
+router.post('/send-email', async (req, res) => {
+    try {
+        const { recipientEmail, subject, text } = req.body;
+
+        const testAccount = await nodemailer.createTestAccount();
+        // Create a transporter object using your email service (e.g., Gmail)
+        const transporter = await nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            auth: {
+                user: 'erin.ferry@ethereal.email',
+                pass: 'Sdy49FuQua5NWryXmG'
+            }
+        });
+
+        const info = await transporter.sendMail({
+            from: '"Developer " <erin.ferry@ethereal.email>', // sender address
+            to: `${recipientEmail}`, // list of receivers
+            subject: `${subject}`, // Subject line
+            text: `${text}`, // plain text body
+            html: "<b>Hello world?</b>", // html body
+        });
+
+        // Log the URL to access the sent email in Ethereal
+        console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
+
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ error: 'Error sending email' });
+    }
+});
 
 
 // Fetch all slots for a specific date
@@ -53,5 +89,28 @@ router.post('/saveslot', async (req, res) => {
         res.status(500).json({ error: 'Error saving poll' });
     }
 });
+
+// Define a route to delete a slot by ID
+router.delete('/delete', async (req, res) => {
+    const { time, date } = req.body; // Get time and date from the request body
+    console.log(time);
+    console.log(date)
+    try {
+        // Find the slot by time and date and delete it from your database
+        const deletedSlot = await Slot.destroy({ where: { time, date } });
+
+        if (deletedSlot === 0) {
+            // If no slot was deleted (slot not found), return a 404 status
+            return res.status(404).json({ error: 'Slot not found' });
+        }
+
+        // If the slot was successfully deleted, return a 204 (No Content) status
+        res.sendStatus(204);
+    } catch (error) {
+        console.error('Error deleting slot:', error);
+        res.status(500).json({ error: 'Error deleting slot' });
+    }
+});
+
 
 module.exports = router;

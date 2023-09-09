@@ -43,6 +43,7 @@ const DayView = ({ date, admin }) => {
                     <Slot
                         key={`slot-${index}`}
                         time={time}
+                        date={date}
                         admin={admin}
                     />
                 ))}
