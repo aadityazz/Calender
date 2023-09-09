@@ -1,46 +1,73 @@
 import React from 'react';
 import '../Styles/Slot.css'; // Import the CSS file for styling
-//import { google } from 'googleapis';
-
-// Set up the OAuth client
-// const oauth2Client = new google.auth.OAuth2(
-//     '374889236058-ebpaj2qsbpetngpu1mk5vjqi33gfbjde.apps.googleusercontent.com',
-//     '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',
-//     'http://localhost:3000'
-// );
-//
-//
-// async function createCalendarEvent(auth, eventDetails) {
-//     const calendar = google.calendar({ version: 'v3', auth });
-//     try {
-//         const calendarEvent = {
-//             summary: eventDetails.summary,
-//             location: eventDetails.location,
-//             description: eventDetails.description,
-//             start: {
-//                 dateTime: eventDetails.startTime,
-//                 timeZone: 'UTC', // Adjust as needed
-//             },
-//             end: {
-//                 dateTime: eventDetails.endTime,
-//                 timeZone: 'UTC', // Adjust as needed
-//             },
-//             attendees: [{ email: eventDetails.guestEmail }],
-//         };
-//
-//         const response = await calendar.events.insert({
-//             calendarId: 'primary', // Use 'primary' for the authenticated user's calendar
-//             resource: calendarEvent,
-//         });
-//
-//         return response.data.id; // Return the event ID if needed
-//     } catch (error) {
-//         console.error('Error creating event:', error);
-//         throw error;
-//     }
-// }
 
 const Slot = ({ time, date, admin }) => {
+
+    const gapi = window.gapi;
+
+    const CLIENT_ID = "374889236058-ebpaj2qsbpetngpu1mk5vjqi33gfbjde.apps.googleusercontent.com"
+    const API_KEY = "AIzaSyDnwTz0HimwS1r7OI23Hy9qJDpYBskPytc"
+    const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
+    const SCOPES = "https://www.googleapis.com/auth/calendar.events"
+
+    const handleEventClick = () => {
+        gapi.load('client:auth2', () => {
+            console.log('loaded client')
+
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES,
+            })
+
+            gapi.client.load('calendar', 'v3', () => console.log('bam!'))
+
+            gapi.auth2.getAuthInstance().signIn()
+                .then(() => {
+
+                    const event = {
+                        'summary': 'Awesome Event!',
+                        'location': 'India',
+                        'description': 'Meeting with the Client',
+                        'start': {
+                            'dateTime': '2020-06-28T09:00:00-07:00',
+                            'timeZone': 'America/Los_Angeles'
+                        },
+                        'end': {
+                            'dateTime': '2020-06-28T17:00:00-07:00',
+                            'timeZone': 'America/Los_Angeles'
+                        },
+                        'recurrence': [
+                            'RRULE:FREQ=DAILY;COUNT=2'
+                        ],
+                        'attendees': [
+                            {'email': 'adigpt0022@gmail.com'},
+                        ],
+                        'reminders': {
+                            'useDefault': false,
+                            'overrides': [
+                                {'method': 'email', 'minutes': 24 * 60},
+                                {'method': 'popup', 'minutes': 10}
+                            ]
+                        }
+                    }
+
+                    const request = gapi.client.calendar.events.insert({
+                        'calendarId': 'primary',
+                        'resource': event,
+                    })
+
+                    request.execute(event => {
+                        console.log(event)
+                        window.open(event.htmlLink)
+                    })
+
+                })
+        })
+    }
+
+
     const handleDelete = async () => {
         try {
             // Make an HTTP DELETE request to delete the slot on the server
@@ -91,22 +118,14 @@ const Slot = ({ time, date, admin }) => {
                 console.log(emailResponse);
                 if (emailResponse.ok) {
                     console.log('Email sent successfully');
+
+                    handleEventClick();
+
                 } else {
                     console.error('Failed to send email:', emailResponse.statusText);
                 }
 
-                // Create a Google Calendar event
-                // const eventDetails = {
-                //     summary: 'Booking Appointment',
-                //     location: 'Google Meet',
-                //     description: 'Appointment with consultant',
-                //     startTime: '2023-09-07T10:00:00Z', // Adjust with the actual start time
-                //     endTime: '2023-09-07T11:00:00Z', // Adjust with the actual end time
-                //     guestEmail: 'adigpt02@gmail.com', // Replace with the guest's email
-                // };
-                //
-                // const eventId = await createCalendarEvent(oauth2Client, eventDetails);
-                // console.log('Google Calendar Event ID:', eventId);
+
             } else {
                 console.error('Failed to delete slot:', response.statusText);
             }
