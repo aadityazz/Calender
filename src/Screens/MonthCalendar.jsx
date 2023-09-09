@@ -30,7 +30,7 @@ const MonthCalendar = () => {
                 </div>
             </div>
             {userInfo && admin ? (
-                <div className="month-calendar">
+                <div>
                         {selectedDate ? (
                             isDateInPast(selectedDate) ? (
                                 <p>Oops, you have selected an invalid date</p>
@@ -46,8 +46,7 @@ const MonthCalendar = () => {
                         )}
                 </div>
             ):(
-                <div className="month-calendar">
-                    <h2>Slots</h2>
+                <div>
                     <div className="calendar-and-dayview">
                         {selectedDate ? (
                             isDateInPast(selectedDate) ? (

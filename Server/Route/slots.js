@@ -4,27 +4,30 @@ const Slot = require('../Model/slots'); // Adjust the model path as needed
 
 
 // Fetch all slots for a specific date
-router.get('/getslots/:date', (req, res) => {
-    const { date } = req.params;
-    console.log(date);
-    if (!date) {
-        return res.status(422).json({ error: 'Please provide a date' });
-    }
+router.get('/getslots/:date', async (req, res) => {
+    console.log("api hit");
+    const { date: requestDate } = req.params;
 
-    Slot.findAll({ where: { date } })
-        .then(savedSlot =>{
-            if(!savedSlot){
-                return res.status(422).json({ error: 'No slots Available' });
-            }
-            const {time} = savedSlot;
-            console.log(21);
-            res.status(200).json({slots:{time}});
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ error: 'Error fetching slots' });
-        });
+    try {
+        const savedSlot = await Slot.findAll({ where: { date: requestDate.replace(/-/g, '/') } });
+        console.log(savedSlot);
+
+        if (!savedSlot || savedSlot.length === 0) {
+            return res.status(422).json({ error: 'No slots Available' });
+        }
+
+        const slotsData = savedSlot.map(slot => ({
+            time: slot.time,
+        }));
+
+        console.log(slotsData);
+        res.status(200).json({slot: slotsData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error fetching slots' });
+    }
 });
+
 
 
 // save slot

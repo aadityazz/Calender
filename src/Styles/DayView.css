@@ -1,0 +1,23 @@
+/* In a separate CSS file or using styled-components */
+.day-view {
+    padding: 20px;
+    margin: 10px;
+}
+
+.day-view-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.slots-container {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    max-height: 300px;
+    overflow-y: auto;
+    flex-wrap: wrap;
+}
+
+/* Add more styles as needed */

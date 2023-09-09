@@ -3,6 +3,7 @@ import profile from '../Utils/profile.svg'; // Import the image correctly
 import '../Styles/Profile.css'; // Import CSS for styling
 
 const Profile = ({ user }) => {
+    const booking = user.bookings;
     return (
         <div className="profile-container">
             <div className="profile-image">
@@ -17,17 +18,24 @@ const Profile = ({ user }) => {
                     <strong>Email:</strong> {user.email}
                 </div>
                 <div>
-                    <h3>Bookings</h3>
-                    {user.bookings.length > 0 ? (
-                        <ul>
-                            {user.bookings.map((booking, index) => (
-                                <li key={index}>{booking.bookingDetails}</li>
-                            ))}
-                        </ul>
+                    {user.isAdmin ? (
+                        <h2>Admin</h2>
                     ) : (
-                        <p>No bookings yet.</p>
+                        <>
+                            <h3>Bookings</h3>
+                            {user.bookings.length > 0 ? (
+                                <ul>
+                                    {user.bookings.map((booking, index) => (
+                                        <li key={index}>{booking.bookingDetails}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No bookings yet.</p>
+                            )}
+                        </>
                     )}
                 </div>
+
             </div>
         </div>
     );
