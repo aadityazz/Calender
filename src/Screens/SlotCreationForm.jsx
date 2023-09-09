@@ -11,7 +11,7 @@ const SlotCreationForm = ({ date}) => {
     };
 
     const handleCreateSlot = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
 
         // Calculate the end time as 1 hour after the selected start time
         const startTime = selectedTime;
@@ -30,12 +30,13 @@ const SlotCreationForm = ({ date}) => {
             endMinute = startMinute;
         }
 
-        const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+        const endTime = `${endHour?.toString().padStart(2, '0')}:${endMinute?.toString().padStart(2, '0')}`;
 
         // Create the time slot string
         const time = `Time: ${startTime} - ${endTime}`;
 
         console.log("Slot button hit");
+        console.log(date.toLocaleString().substring(0,10))
         console.log(time)
         fetch("http://localhost:5000/api/slot/saveslot", {
             method: "post",
@@ -43,8 +44,8 @@ const SlotCreationForm = ({ date}) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                date,
-                time
+                date: date.toLocaleString().substring(0,10),
+                time: time,
             })
         }).then(res => res.json())
             .then(data => {

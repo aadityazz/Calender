@@ -1,39 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slot from './Slot';
 
 const DayView = ({ date, admin }) => {
-    // Generate slots for the selected date
-    const generateSlots = () => {
-        // Example slots for demonstration, you should replace this with your data or logic
-        const slotsData = [
-            { startTime: '10:00 AM', endTime: '11:00 AM', color: 'blue' },
-            { startTime: '11:00 AM', endTime: '12:00 PM', color: 'green' },
-            { startTime: '2:00 PM', endTime: '3:00 PM', color: 'red' },
-        ];
+    const [slotsData, setSlotsData] = useState([]);
+    const [error, setError] = useState(null);
+    console.log(date.toLocaleString().substring(0,10));
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/slot/getslots/${date.toLocaleString().substring(0,10)}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
 
-        return slotsData.map((slot, index) => (
-            <Slot
-                key={`slot-${index}`}
-                startTime={slot.startTime}
-                endTime={slot.endTime}
-                color={slot.color}
-                admin ={admin}
-                onSelect={handleSlotSelect} // You can define the handleSlotSelect function
-            />
-        ));
-    };
+                console.log(response.json());
+                if (response.ok) {
+                    const data = await response.json();
+                    setSlotsData(data);
+                    console.log(data);
+                }
 
-    // Handle slot selection, you can implement your logic here
-    const handleSlotSelect = (selectedSlot) => {
-        // Implement your logic for handling the selected slot here
-        console.log('Selected Slot:', selectedSlot);
-    };
+                //console.log(slotsData);
+
+            } catch (error) {
+                console.error('Error fetching slots:', error);
+                //console.log('Response:', response.text()); // Log the response for debugging
+                setError(error.message);
+            }
+        };
+
+        fetchData();
+    }, [date]);
+
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
 
     return (
         <div className="day-view">
             <h3>Available Time Slots for {date.toLocaleDateString()}</h3>
             <div className="slots-container">
-                {generateSlots()}
+                {slotsData.map((slot, index) => (
+                    <Slot
+                        key={`slot-${index}`}
+                        time={slot.time}
+                        admin={admin}
+
+                    />
+                ))}
             </div>
         </div>
     );
