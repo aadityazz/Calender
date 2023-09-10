@@ -6,7 +6,8 @@ const { sequelize } = require('./db'); // Import sequelize instance from db.js
 const PORT =  5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'https://calendar-get-me-therapy.netlify.app' }));
+//app.use(cors());
 app.use(bodyParser.json());
 
 // Import models

@@ -9,10 +9,10 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const isAdmin = 1;
 
-    const register = (event) => {
+    const register = async (event) => {
         event.preventDefault();
         //console.log("button hit")
-        fetch("http://localhost:5000/api/auth/signup",{
+        await fetch("http://localhost:5000/api/auth/signup",{
             method:"post",
             headers:{
                 "Content-Type":"application/json"

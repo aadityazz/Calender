@@ -6,7 +6,7 @@ const { JWT_SECRET } = require('../keys');
 const Auth = require('../Model/user'); // Adjust the model path as needed
 
 // Auth signup route
-router.post('/signup', (req, res) => {
+router.post('/signup',  async (req, res) => {
     const { username, email, password, isAdmin } = req.body;
 
     console.log(req.body);
@@ -15,7 +15,7 @@ router.post('/signup', (req, res) => {
         return res.status(422).json({ error: 'Please add all the fields' });
     }
 
-    bcrypt.hash(password, 12)
+    await bcrypt.hash(password, 12)
         .then(hashedPassword => {
             const user = new Auth({
                 username,
@@ -41,14 +41,14 @@ router.post('/signup', (req, res) => {
 
 
 // Auth signin route
-router.post('/signin', (req, res) => {
+router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
         return res.status(422).json({ error: 'Please add email or password' });
     }
 
-    Auth.findOne({where:{email}})
+    await Auth.findOne({where:{email}})
         .then(savedUser => {
             if (!savedUser) {
                 return res.status(422).json({ error: 'Invalid Email or password' });

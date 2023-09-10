@@ -162,7 +162,7 @@ router.post('/create-event', async (req, res) => {
     const { event } = req.body;
     //console.log(event);
 
-    insertEvent(event)
+    await insertEvent(event)
         .then((res) => {
             return res.status(200).json({message: "Event has been created on calendar"});
             //console.log(res);

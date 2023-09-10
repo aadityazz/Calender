@@ -10,7 +10,7 @@ const SlotCreationForm = ({ date}) => {
         setSelectedTime(event.target.value);
     };
 
-    const handleCreateSlot = (event) => {
+    const handleCreateSlot = async (event) => {
         //event.preventDefault();
 
         // Calculate the end time as 1 hour after the selected start time
@@ -38,7 +38,7 @@ const SlotCreationForm = ({ date}) => {
         console.log("Slot button hit");
         console.log(date.toLocaleString().substring(0,10))
         console.log(time)
-        fetch("http://localhost:5000/api/slot/saveslot", {
+        await fetch("http://localhost:5000/api/slot/saveslot", {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
