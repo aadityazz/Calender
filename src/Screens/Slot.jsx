@@ -3,69 +3,68 @@ import '../Styles/Slot.css'; // Import the CSS file for styling
 
 const Slot = ({ time, date, admin }) => {
 
-    const gapi = window.gapi;
+    const dateTimeForCalendar = (time, date) => {
+        // Check if date is a valid string
+        if (typeof date !== 'string') {
+            throw new Error('Invalid date format');
+        }
 
-    const CLIENT_ID = "374889236058-ebpaj2qsbpetngpu1mk5vjqi33gfbjde.apps.googleusercontent.com"
-    const API_KEY = "AIzaSyDnwTz0HimwS1r7OI23Hy9qJDpYBskPytc"
-    const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
-    const SCOPES = "https://www.googleapis.com/auth/calendar.events"
+        // Split the date into its components
+        const dateComponents = date.split('/');
+        if (dateComponents.length !== 3) {
+            throw new Error('Invalid date format');
+        }
 
-    const handleEventClick = () => {
-        gapi.load('client:auth2', () => {
-            console.log('loaded client')
+        const day = parseInt(dateComponents[0], 10);
+        const month = parseInt(dateComponents[1], 10);
+        const year = parseInt(dateComponents[2], 10);
 
-            gapi.client.init({
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                discoveryDocs: DISCOVERY_DOCS,
-                scope: SCOPES,
-            })
+        // Extract the start and end times
+        const timeParts = time.split(' - ');
+        if (timeParts.length !== 2) {
+            throw new Error('Invalid time format');
+        }
 
-            gapi.client.load('calendar', 'v3', () => console.log('bam!'))
+        const [startTime, endTime] = timeParts;
 
-            gapi.auth2.getAuthInstance().signIn()
-                .then(() => {
+        // Parse the start and end times in hh:mm format
+        const [startHour, startMinute] = startTime.split(':').map(Number);
+        const [endHour, endMinute] = endTime.split(':').map(Number);
 
-                    const event = {
-                        'summary': 'Awesome Event!',
-                        'location': 'India',
-                        'description': 'Meeting with the Client',
-                        'start': {
-                            'dateTime': '2020-06-28T09:00:00-07:00',
-                            'timeZone': 'America/Los_Angeles'
-                        },
-                        'end': {
-                            'dateTime': '2020-06-28T17:00:00-07:00',
-                            'timeZone': 'America/Los_Angeles'
-                        },
-                        'recurrence': [
-                            'RRULE:FREQ=DAILY;COUNT=2'
-                        ],
-                        'attendees': [
-                            {'email': 'adigpt0022@gmail.com'},
-                        ],
-                        'reminders': {
-                            'useDefault': false,
-                            'overrides': [
-                                {'method': 'email', 'minutes': 24 * 60},
-                                {'method': 'popup', 'minutes': 10}
-                            ]
-                        }
-                    }
+        // Create the start and end date objects
+        const startDate = new Date(year, month - 1, day, startHour, startMinute);
+        const endDate = new Date(year, month - 1, day, endHour, endMinute);
 
-                    const request = gapi.client.calendar.events.insert({
-                        'calendarId': 'primary',
-                        'resource': event,
-                    })
+        // Adjust the time zone offset to '+05:30'
+        const TIMEOFFSET = '+05:30';
+        startDate.setHours(startDate.getHours() - 5);
+        startDate.setMinutes(startDate.getMinutes() - 30);
+        endDate.setHours(endDate.getHours() - 5);
+        endDate.setMinutes(endDate.getMinutes() - 30);
 
-                    request.execute(event => {
-                        console.log(event)
-                        window.open(event.htmlLink)
-                    })
+        // Format the dates as 'YYYY-MM-DDThh:mm:ss+00:00'
+        const formatDate = (date) => {
+            const year = date.getUTCFullYear();
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(date.getUTCDate()).padStart(2, '0');
+            const hours = String(date.getUTCHours()).padStart(2, '0');
+            const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+            const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}+00:00`;
+        };
 
-                })
-        })
-    }
+        const startDateFormatted = formatDate(startDate);
+        const endDateFormatted = formatDate(endDate);
+
+        return {
+            'start': startDateFormatted,
+            'end': endDateFormatted,
+        };
+    };
+
+
+
+
 
 
     const handleDelete = async () => {
@@ -119,7 +118,85 @@ const Slot = ({ time, date, admin }) => {
                 if (emailResponse.ok) {
                     console.log('Email sent successfully');
 
-                    handleEventClick();
+                    const dateForm = date.toLocaleString().substring(0,10);
+                    const timing = time.toString();
+                    const timeForm = timing.substring(6, timing.length);
+
+                    if (typeof dateForm !== 'string') {
+                        throw new Error('Invalid date format');
+                    }
+
+                    // Split the date into its components
+                    const dateComponents = dateForm.split('/');
+                    if (dateComponents.length !== 3) {
+                        throw new Error('Invalid date format');
+                    }
+
+                    const day = parseInt(dateComponents[0], 10);
+                    const month = parseInt(dateComponents[1], 10);
+                    const year = parseInt(dateComponents[2], 10);
+
+                    // Extract the start and end times
+                    const timeParts = timeForm.split(' - ');
+                    if (timeParts.length !== 2) {
+                        throw new Error('Invalid time format');
+                    }
+
+                    const [startTime, endTime] = timeParts;
+
+                    // Parse the start and end times in hh:mm format
+                    const [startHour, startMinute] = startTime.split(':').map(Number);
+                    const [endHour, endMinute] = endTime.split(':').map(Number);
+
+                    // Create the start and end date objects
+                    const startDate = new Date(year, month - 1, day, startHour, startMinute);
+                    const endDate = new Date(year, month - 1, day, endHour, endMinute);
+
+                    // Adjust the time zone offset to '+05:30'
+                    const TIMEOFFSET = '+05:30';
+                    startDate.setHours(startDate.getHours() - 5);
+                    startDate.setMinutes(startDate.getMinutes() - 30);
+                    endDate.setHours(endDate.getHours() - 5);
+                    endDate.setMinutes(endDate.getMinutes() - 30);
+
+                    // Format the dates as 'YYYY-MM-DDThh:mm:ss+00:00'
+                    const formatDate = (date) => {
+                        const year = date.getUTCFullYear();
+                        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+                        const day = String(date.getUTCDate()).padStart(2, '0');
+                        const hours = String(date.getUTCHours()).padStart(2, '0');
+                        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+                        const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+                        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}+00:00`;
+                    };
+
+                    const startDateFormatted = formatDate(startDate);
+                    const endDateFormatted = formatDate(endDate);
+
+                    console.log()
+
+                    const event = {
+                        'summary': `Meeting with Client`,
+                        'description': `A meeting has been set with Client`,
+                        'start': {
+                            'dateTime': startDateFormatted,
+                            'timeZone': 'Asia/Kolkata'
+                        },
+                        'end': {
+                            'dateTime': endDateFormatted,
+                            'timeZone': 'Asia/Kolkata'
+                        }
+                    };
+                    console.log(event)
+                    await fetch('http://localhost:5000/api/slot/create-event',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            event
+                        }),
+                    });
 
                 } else {
                     console.error('Failed to send email:', emailResponse.statusText);

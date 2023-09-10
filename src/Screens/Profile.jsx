@@ -18,22 +18,8 @@ const Profile = ({ user }) => {
                     <strong>Email:</strong> {user.email}
                 </div>
                 <div>
-                    {!user.isAdmin ? (
-                        <>
-                            <h3>Bookings</h3>
-                            {user.bookings.length > 0 ? (
-                                <ul>
-                                    {user.bookings.map((booking, index) => (
-                                        <li key={index}>{booking.bookingDetails}</li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No bookings yet.</p>
-                            )}
-                        </>
-                    ) : (
-                        <></>
-                    )}
+                    <h3>Bookings</h3>
+                    <p> Feature to be implemented </p>
                 </div>
 
             </div>

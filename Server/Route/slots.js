@@ -2,6 +2,50 @@ const express = require('express');
 const router = express.Router();
 const Slot = require('../Model/slots'); // Adjust the model path as needed
 const nodemailer = require('nodemailer');
+const {google} = require('googleapis');
+require('dotenv').config();
+
+// Provide the required configuration
+const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
+const calendarId = process.env.CALENDAR_ID;
+
+// Google calendar API settings
+const SCOPES = 'https://www.googleapis.com/auth/calendar';
+const calendar = google.calendar({version : "v3"});
+
+const auth = new google.auth.JWT(
+    CREDENTIALS.client_email,
+    null,
+    CREDENTIALS.private_key,
+    SCOPES
+);
+
+
+
+// Insert new event to Google Calendar
+const insertEvent = async (event) => {
+
+    try {
+        let response = await calendar.events.insert({
+            auth: auth,
+            calendarId: calendarId,
+            resource: event
+        });
+
+        console.log("Resp: " + JSON.stringify(response));
+
+        if (response['statusText'] === 'OK') {
+            console.log("Event has been created")
+            return 1;
+        } else {
+            console.log("Event hasn't been created")
+            return 0;
+        }
+    } catch (error) {
+        console.log(`Error at insertEvent --> ${error}`);
+        return 0;
+    }
+};
 
 
 // Define an API endpoint for sending emails
@@ -106,10 +150,27 @@ router.delete('/delete', async (req, res) => {
 
         // If the slot was successfully deleted, return a 204 (No Content) status
         res.sendStatus(204);
+
     } catch (error) {
         console.error('Error deleting slot:', error);
         res.status(500).json({ error: 'Error deleting slot' });
     }
+});
+
+//
+router.post('/create-event', async (req, res) => {
+    console.log("create event api hit");
+    const { event } = req.body;
+    console.log(event);
+
+    insertEvent(event)
+        .then((res) => {
+            return res.status(200).json({message: "Event has been created on calendar"});
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
 
 
