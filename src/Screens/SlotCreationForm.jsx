@@ -61,7 +61,7 @@ const SlotCreationForm = ({ date}) => {
 
 
     return (
-        <div className="slot-creation-form" onClick={handleCreateSlot}>
+        <div className="slot-creation-form">
             <h2>Create Slots for</h2>
 
             <p>{date.toLocaleDateString()}</p>
@@ -74,7 +74,7 @@ const SlotCreationForm = ({ date}) => {
                     onChange={handleTimeChange}
                 />
             </div>
-            <button className="create-button" >Create Slot</button>
+            <button className="create-button" onClick={handleCreateSlot}>Create Slot</button>
         </div>
     );
 };
