@@ -9,6 +9,7 @@ const Header = () => {
 
     const onLogout = () => {
         setUserInfo(null);
+        localStorage.removeItem("user");
     };
 
     return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Slot from './Slot';
 import '../Styles/DayView.css';
 
-const DayView = ({ date, admin }) => {
+const DayView = ({ date, id, admin }) => {
     const [slotsData, setSlotsData] = useState([]); // Initialize with an empty array
     console.log(date.toLocaleString().substring(0, 10));
 
@@ -44,7 +44,8 @@ const DayView = ({ date, admin }) => {
                         key={`slot-${index}`}
                         time={time}
                         date={date}
-                        admin={admin}
+                        id={id}
+                        admin = {admin}
                     />
                 ))}
             </div>

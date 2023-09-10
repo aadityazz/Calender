@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import '../Styles/Login.css'; // Import the CSS file for styling
@@ -8,7 +8,15 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [redirect, setRedirect] = useState(false);
-    const { setUserInfo } = useContext(UserContext);
+    const { userInfo, setUserInfo } = useContext(UserContext);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setUserInfo(JSON.parse(storedUser));
+            setRedirect(true);
+        }
+    }, []);
 
     const PostData = async (event) => {
         event.preventDefault();
@@ -22,10 +30,10 @@ export default function Login() {
             if (response.ok) {
                 const userInfo = await response.json();
                 setUserInfo(userInfo);
-                console.log(userInfo);
+                localStorage.setItem("user", JSON.stringify( userInfo));
                 setRedirect(true);
             } else {
-                const errorData = await response.json(); // Parse error response
+                const errorData = await response.json();
                 M.toast({ html: errorData.error || 'Wrong credentials', classes: "#c62828 red darken-3" });
             }
         } catch (error) {

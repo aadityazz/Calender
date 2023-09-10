@@ -37,7 +37,7 @@ const MonthCalendar = () => {
                             ) : (
                                 <div>
                                     <SlotCreationForm date={selectedDate}/>
-                                    <DayView date={selectedDate} admin = {admin}/>
+                                    <DayView date={selectedDate} id = {userInfo.id} admin = {admin}/>
                                 </div>
                             )
 
@@ -52,7 +52,7 @@ const MonthCalendar = () => {
                             isDateInPast(selectedDate) ? (
                                 <p>Oops, you have selected an invalid date</p>
                             ) : (
-                                <DayView date={selectedDate} />
+                                <DayView date={selectedDate} id={userInfo.id}/>
                             )
                         ) : (
                             <p>Select any date to see slots</p>

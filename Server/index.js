@@ -16,6 +16,7 @@ const Slot = require('./Model/slots')
 // Routes
 app.use('/api/auth', require('./Route/auth'));
 app.use('/api/slot', require('./Route/slots'))
+//app.use('/api/order', require('./Route/order'));
 
 // Start server
 sequelize.authenticate()

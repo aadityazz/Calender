@@ -1,71 +1,8 @@
 import React from 'react';
-import '../Styles/Slot.css'; // Import the CSS file for styling
+import '../Styles/Slot.css';
+import M from "materialize-css"; // Import the CSS file for styling
 
-const Slot = ({ time, date, admin }) => {
-
-    const dateTimeForCalendar = (time, date) => {
-        // Check if date is a valid string
-        if (typeof date !== 'string') {
-            throw new Error('Invalid date format');
-        }
-
-        // Split the date into its components
-        const dateComponents = date.split('/');
-        if (dateComponents.length !== 3) {
-            throw new Error('Invalid date format');
-        }
-
-        const day = parseInt(dateComponents[0], 10);
-        const month = parseInt(dateComponents[1], 10);
-        const year = parseInt(dateComponents[2], 10);
-
-        // Extract the start and end times
-        const timeParts = time.split(' - ');
-        if (timeParts.length !== 2) {
-            throw new Error('Invalid time format');
-        }
-
-        const [startTime, endTime] = timeParts;
-
-        // Parse the start and end times in hh:mm format
-        const [startHour, startMinute] = startTime.split(':').map(Number);
-        const [endHour, endMinute] = endTime.split(':').map(Number);
-
-        // Create the start and end date objects
-        const startDate = new Date(year, month - 1, day, startHour, startMinute);
-        const endDate = new Date(year, month - 1, day, endHour, endMinute);
-
-        // Adjust the time zone offset to '+05:30'
-        const TIMEOFFSET = '+05:30';
-        startDate.setHours(startDate.getHours() - 5);
-        startDate.setMinutes(startDate.getMinutes() - 30);
-        endDate.setHours(endDate.getHours() - 5);
-        endDate.setMinutes(endDate.getMinutes() - 30);
-
-        // Format the dates as 'YYYY-MM-DDThh:mm:ss+00:00'
-        const formatDate = (date) => {
-            const year = date.getUTCFullYear();
-            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(date.getUTCDate()).padStart(2, '0');
-            const hours = String(date.getUTCHours()).padStart(2, '0');
-            const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-            const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}+00:00`;
-        };
-
-        const startDateFormatted = formatDate(startDate);
-        const endDateFormatted = formatDate(endDate);
-
-        return {
-            'start': startDateFormatted,
-            'end': endDateFormatted,
-        };
-    };
-
-
-
-
-
+const Slot = ({ time, date, id, admin }) => {
 
     const handleDelete = async () => {
         try {
@@ -101,6 +38,27 @@ const Slot = ({ time, date, admin }) => {
 
             if (response.ok) {
                 console.log('Delete success');
+
+                // await fetch("http://localhost:5000/api/order/add", {
+                //     method: "post",
+                //     headers: {
+                //         "Content-Type": "application/json"
+                //     },
+                //     body: JSON.stringify({
+                //         user_id: id,
+                //         date: date.toLocaleString().substring(0,10),
+                //         time: time,
+                //     })
+                // }).then(res => res.json())
+                //     .then(data => {
+                //         if (data.error) {
+                //             M.toast({ html: data.error, classes: "#c62828 red darken-3" });
+                //         } else {
+                //             M.toast({ html: data.message, classes: "#43a047 green darken-1" });
+                //         }
+                //     }).catch(err => {
+                //         console.log(err);
+                //     });
 
                 // Send an email request to the server
                 const emailResponse = await fetch('http://localhost:5000/api/slot/send-email', {
